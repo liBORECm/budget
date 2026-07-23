@@ -30,6 +30,31 @@ export abstract class CRUDService<
         return (await query) as Array<Entity>
     }
 
+    public async getAllEnriched(
+        enrich: (record: Entity) => Promise<EnrichedEntity>,
+        modifier?: Knex.QueryCallbackWithArgs<any, any>,
+        sort?: { attribute: string; order: 'ASC' | 'DESC' },
+        offset?: number,
+        limit?: number,
+    ): Promise<Array<EnrichedEntity>> {
+        let query = db(this.tableName).where('deleted_at', null)
+
+        if (modifier !== undefined) query = query.modify(modifier)
+        if (sort !== undefined)
+            query = query.orderBy(sort.attribute, sort.order)
+        if (offset !== undefined) query = query.offset(offset)
+        if (limit !== undefined) query = query.limit(limit)
+
+        const base = (await query) as Array<Entity>
+
+        const enriched = [] as Array<EnrichedEntity>
+        for(const record of base) {
+            enriched.push(await enrich(record))
+        }
+
+        return enriched
+    } 
+
     public async get(
         id: number,
         enrich?: (record: Entity) => Promise<EnrichedEntity>,
@@ -65,7 +90,7 @@ export abstract class CRUDService<
     public async edit(
         id: number,
         record: Entity,
-        approveEdit?: (record) => Promise<void>,
+        approveEdit?: (record: Entity) => Promise<void>,
     ): Promise<EnrichedEntity> {
         if (approveEdit !== undefined) await approveEdit(record)
 
