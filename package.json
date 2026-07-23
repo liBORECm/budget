@@ -1,0 +1,49 @@
+{
+    "name": "",
+    "version": "",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "",
+        "build": "cd frontend && npm run build && cd .. && npm run swagger && tsc -p .",
+        "dev": "nodemon src/server.ts",
+        "prepare": "husky",
+        "swagger": "ts-node src/swagger.ts",
+        "migrate:latest": "npx knex migrate:latest",
+        "migrate:up": "npx knex migrate:up",
+        "migrate:down": "npx knex migrate:down",
+        "migrate:make": "npx knex migrate:make -x ts",
+        "entity": "node scripts/entity.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    },
+    "dependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/swagger-jsdoc": "^6.0.4",
+        "cors": "^2.8.6",
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "knex": "^3.3.0",
+        "mysql": "^2.18.1",
+        "nodemon": "^3.1.14",
+        "objection": "^3.1.5",
+        "swagger-jsdoc": "^6.3.0",
+        "swagger-ui-express": "^5.0.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^6.0.3"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.1.0",
+        "@types/node": "^26.0.1",
+        "@types/swagger-ui-express": "^4.1.8",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.0.8",
+        "prettier": "^3.9.1"
+    }
+}
